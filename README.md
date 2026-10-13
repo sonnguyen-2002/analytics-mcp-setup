@@ -1,45 +1,44 @@
 # analytics-mcp-setup
 
-Kết nối **Claude Code** với **Google Analytics 4** bằng một lệnh, trên Windows.
-Dùng MCP chính thức của Google ([googleanalytics/google-analytics-mcp](https://github.com/googleanalytics/google-analytics-mcp)), chỉ đọc báo cáo — không sửa được cài đặt GA.
+Kết nối **Claude Code** và **Codex** với **Google Analytics 4** trên Windows — tải về, bấm đúp, đăng nhập Google là xong.
+Dùng MCP chính thức của Google ([googleanalytics/google-analytics-mcp](https://github.com/googleanalytics/google-analytics-mcp)), chạy ngay trên máy bạn và chỉ đọc báo cáo — không sửa được cài đặt GA.
 
 ## Cài trên máy mới
 
-Mở PowerShell rồi chạy **một lệnh** (không cần tải repo về):
+1. Tải repo về: nút **Code → Download ZIP** trên trang này, rồi giải nén (hoặc `git clone`).
+2. **Bấm đúp `install.cmd`**.
+3. Khi trình duyệt mở ra, **đăng nhập tài khoản Google** có quyền xem GA và bấm **Cho phép** — việc duy nhất phải làm tay.
+4. Thấy chữ xanh **Done** là xong. Mở **phiên Claude Code hoặc Codex mới** và hỏi, ví dụ:
+
+   > Dùng analytics-mcp xem 7 ngày gần nhất của property 557618398.
+
+Công cụ tự cài những gì máy còn thiếu (Python, pipx, Google Cloud CLI) và tự thêm MCP vào **Claude Code** (mọi dự án) và **Codex** (`config.toml`) — cái nào có trên máy thì cài cái đó. Các MCP khác trong Codex được giữ nguyên; bản cũ của `config.toml` được lưu thành `config.toml.bak`.
+
+Không muốn tải về? Mở PowerShell và chạy một lệnh:
 
 ```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/sonnguyen-2002/analytics-mcp-setup/main/setup.ps1)))
 ```
 
-Hoặc tải repo về rồi chạy:
+## Tuỳ chọn
 
-```powershell
-git clone https://github.com/sonnguyen-2002/analytics-mcp-setup.git
-cd analytics-mcp-setup
-powershell -ExecutionPolicy Bypass -File setup.ps1
-```
+Thêm sau `install.cmd` (trong cửa sổ dòng lệnh) hoặc sau lệnh một dòng ở trên:
 
-Công cụ tự cài Python, pipx và Google Cloud CLI nếu máy chưa có, mở trình duyệt để bạn **đăng nhập Google** (việc duy nhất phải làm tay), rồi thêm MCP `analytics-mcp` cho mọi dự án Claude Code.
+| Tuỳ chọn | Ý nghĩa |
+|---|---|
+| `-Target claude` / `codex` / `both` | Chỉ cài cho Claude Code, chỉ Codex, hoặc cả hai (mặc định: cái nào có trên máy) |
+| `-Name analytics-khach` | Thêm tài khoản Google thứ hai, chạy song song với tài khoản đầu |
+| `-Project <project-id>` | Google Cloud project dùng để gọi API (mặc định `sona-511503`) |
+| `-Remove` | Gỡ MCP có tên `-Name` khỏi Claude Code, Codex và xoá bản đăng nhập của nó |
 
-Xong thì mở **một phiên Claude Code mới** và hỏi, ví dụ:
+Ví dụ: `install.cmd -Name analytics-khach -Project my-project`
 
-> Dùng analytics-mcp xem 7 ngày gần nhất của property 557618398.
+`-Project`: tài khoản Google phải có quyền trong project đó, và project phải bật **Google Analytics Data API** và **Google Analytics Admin API**.
 
-## Thêm tài khoản Google khác
+## Lỗi hay gặp
 
-Mỗi tài khoản là một MCP riêng, dùng song song được:
-
-```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sonnguyen-2002/analytics-mcp-setup/main/setup.ps1))) -Name analytics-khach -Project <project-id>
-```
-
-`-Project` là Google Cloud project dùng để gọi API: tài khoản phải có quyền trong project đó, và project phải bật **Google Analytics Data API** và **Google Analytics Admin API**.
-
-## Gỡ
-
-```powershell
-powershell -ExecutionPolicy Bypass -File setup.ps1 -Name analytics-mcp -Remove
-```
+- **Không tìm thấy `python` hoặc `gcloud` ngay sau khi vừa cài**: đóng cửa sổ, bấm đúp `install.cmd` lần nữa.
+- **Windows hỏi "Cho phép ứng dụng thay đổi thiết bị?"**: bấm **Có** (để cài Python / Google Cloud CLI).
 
 ## Bảo mật
 
@@ -47,4 +46,4 @@ Repo này **không chứa bí mật nào**. Thông tin đăng nhập Google củ
 
 ---
 
-**English:** one-command setup of Google's analytics-mcp for Claude Code on Windows. Run `setup.ps1`, sign in to Google in the browser, then open a new Claude Code session. Use `-Name` for extra accounts and `-Remove` to uninstall. No secrets are stored in this repository.
+**English:** download, double-click `install.cmd`, sign in to Google, then open a new Claude Code or Codex session. It installs what is missing (Python, pipx, Google Cloud CLI) and registers Google's analytics-mcp in Claude Code and/or Codex. Options: `-Target`, `-Name`, `-Project`, `-Remove`. No secrets are stored in this repository.
