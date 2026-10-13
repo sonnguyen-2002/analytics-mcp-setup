@@ -5,7 +5,13 @@ Dùng MCP chính thức của Google ([googleanalytics/google-analytics-mcp](htt
 
 ## Cài trên máy mới
 
-Mở PowerShell rồi chạy:
+Mở PowerShell rồi chạy **một lệnh** (không cần tải repo về):
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sonnguyen-2002/analytics-mcp-setup/main/setup.ps1)))
+```
+
+Hoặc tải repo về rồi chạy:
 
 ```powershell
 git clone https://github.com/sonnguyen-2002/analytics-mcp-setup.git
@@ -24,7 +30,7 @@ Xong thì mở **một phiên Claude Code mới** và hỏi, ví dụ:
 Mỗi tài khoản là một MCP riêng, dùng song song được:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File setup.ps1 -Name analytics-khach -Project <project-id>
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sonnguyen-2002/analytics-mcp-setup/main/setup.ps1))) -Name analytics-khach -Project <project-id>
 ```
 
 `-Project` là Google Cloud project dùng để gọi API: tài khoản phải có quyền trong project đó, và project phải bật **Google Analytics Data API** và **Google Analytics Admin API**.
